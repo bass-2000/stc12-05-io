@@ -6,12 +6,6 @@ import java.util.List;
 
 public class EmployeeData {
     private static String fileName = "C:\\TEMP\\MyTestData.txt";
-    private static String tmpfileName = "C:\\TEMP\\tmpMyTestData.txt";
-
-    public String getFileName() {
-
-        return fileName;
-    }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
@@ -63,6 +57,18 @@ public class EmployeeData {
         } return true;
     }
 
+    public static Employee getByName(String name) {
+        List<Employee> list = new ArrayList<Employee>();
+        Employee resultEmployee = null;
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            list = (ArrayList<Employee>) objectInputStream.readObject();
+            for (Employee empl : list) if (empl.getName().equals(name)) resultEmployee = empl;
+        } catch (ClassNotFoundException | IOException e) {
+            System.out.println(e);
+        }
+        return resultEmployee;
+    }
+
     public static void clearFile(){
         try {
             new FileOutputStream(fileName).close();
@@ -70,5 +76,17 @@ public class EmployeeData {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    public static List<Employee> getByJob(Job job) {
+        List<Employee> list = new ArrayList<>();
+        List<Employee> resultList = new ArrayList<>();
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))) {
+            list = (ArrayList<Employee>) objectInputStream.readObject();
+            for (Employee empl : list) if (empl.getJob().equals(job)) resultList.add(empl);
+        } catch (ClassNotFoundException | IOException e) {
+            System.out.println(e);
+        }
+        return resultList;
     }
 }
