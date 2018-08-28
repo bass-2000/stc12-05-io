@@ -102,16 +102,31 @@ public class EmployeeData {
 
     public static boolean saveOrUpdate(Employee employee) {
         ArrayList<Employee> list = readListFromFile();
-        boolean found = false;
+        boolean result = false;
         for (int i = 0; i < list.size(); i++) {
             if ((list.get(i).getName().equals(employee.getName()) && list.get(i).getAge() == employee.getAge())) {
                 list.get(i).setSalary(employee.getSalary());
                 list.get(i).setJob(employee.getJob());
-                found = true;
+                result = true;
             }
         }
-        if (!found) list.add(employee);
+        if (!result) list.add(employee);
         clearFile();
-        return saveListToFile(list);
+        result = saveListToFile(list);
+        return result;
+    }
+
+    public static boolean changeAllWork(Job pastJob, Job futureJob) {
+        ArrayList<Employee> list = readListFromFile();
+        boolean result = false;
+        for (Employee employee : list) {
+            if (employee.getJob().equals(pastJob)) {
+                employee.setJob(futureJob);
+                result = true;
+            }
+        }
+        clearFile();
+        result = saveListToFile(list);
+        return result;
     }
 }

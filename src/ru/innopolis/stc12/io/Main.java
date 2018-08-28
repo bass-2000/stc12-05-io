@@ -32,9 +32,11 @@ public class Main {
         System.out.println("Метод поиска по имени: " + EmployeeData.getByName("Alex"));
 
         List<Employee> list = EmployeeData.getByJob(Job.CLERK);
-        System.out.println("Метод поиска по Job: ");
+        System.out.println("\nМетод поиска по Job: ");
         for (Employee employee : list) System.out.println(employee);
 
         EmployeeData.saveOrUpdate(new Employee("Kara", 68, 999999, Job.ADMINISTRATOR));
+
+        EmployeeData.changeAllWork(Job.ADMINISTRATOR, Job.COORDINATOR);
     }
 }
