@@ -1,4 +1,4 @@
-package ru.innopolis.stc12.io.demo.DataExample;
+package ru.innopolis.stc12.io.onlessondemo.DataExample;
 
 import java.io.*;
 

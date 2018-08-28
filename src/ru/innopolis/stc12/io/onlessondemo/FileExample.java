@@ -1,4 +1,4 @@
-package ru.innopolis.stc12.io.demo;
+package ru.innopolis.stc12.io.onlessondemo;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

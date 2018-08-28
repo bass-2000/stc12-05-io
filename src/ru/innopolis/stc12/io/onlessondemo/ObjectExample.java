@@ -1,6 +1,6 @@
-package ru.innopolis.stc12.io.demo;
+package ru.innopolis.stc12.io.onlessondemo;
 
-import ru.innopolis.stc12.io.demo.DataExample.Person;
+import ru.innopolis.stc12.io.onlessondemo.DataExample.Person;
 
 import java.io.*;
 import java.util.ArrayList;
