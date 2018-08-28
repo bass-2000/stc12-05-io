@@ -4,6 +4,21 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 1.      Реализовать следующие методы:
+ * <p>
+ * a.      boolean save (Employee), дописывающий сотрудника в конец файла
+ * b.      boolean delete (Employee), удаляющий сотрудника из файла
+ * c.      Employee getByName (тип name), возвращающий сотрудника по полному совпадению имени
+ * d.      List<Employee> getByJob(тип job), возвращающий список сотрудников по должности
+ * e.      boolean saveOrUpdate (Employee), выполняющий обновление, либо сохранение сотрудника в зависимости от того, есть ли он уже в файле
+ * f.       boolean changeAllWork (какую должноcть, на какую должность), выполняющий замену заданной должности на заданную для всех сотрудников
+ * g.      Используем сериализацию/десериализацию «Из коробки»
+ * 2.      Доп. Задание (+10%) в конец файла дописывать сумму зарплат всех сотрудников (с помощью Externalizable)
+ * <p>
+ * 3.      Доп. Задание (+10%) сделать все на кастомной сериализции/десериализации (BufferedReader/BufferedWriter)
+ */
+
 public class EmployeeData {
     private static String fileName = "C:\\TEMP\\MyTestData.txt";
 
@@ -11,18 +26,11 @@ public class EmployeeData {
         this.fileName = fileName;
     }
 
-    public static boolean save(Employee employee) {
-        ArrayList<Employee> list = new ArrayList<>();
-        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))){
-            list = (ArrayList<Employee>) objectInputStream.readObject();
-        }catch (ClassNotFoundException|IOException e){
-        }
-
-        list.add(employee);
-        clearFile();
+    private static boolean saveListToFile(List<Employee> list) {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(fileName, true))) {
             objectOutputStream.writeObject(list);
-            System.out.println(employee.toString() + " was saved to file " + fileName);
+            System.out.println("------------------------\nЗапись в файл\n-----------------");
+            for (int i = 0; i < list.size(); i++) System.out.println(list.get(i) + " был записан в файл");
             return true;
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -30,46 +38,53 @@ public class EmployeeData {
         }
     }
 
-    public static boolean delete(Employee employee) {
-        List<Employee> list = new ArrayList<Employee>();
-        Employee currentLine=null;
+    public static ArrayList<Employee> readListFromFile() {
+        ArrayList<Employee> list = new ArrayList<>();
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))) {
             list = (ArrayList<Employee>) objectInputStream.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+        }
+        return list;
+    }
 
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).getName().equals(employee.getName())
-                    &&(list.get(i).getAge()==employee.getAge())
-                    &&(list.get(i).getJob().equals(employee.getJob()))
-                    &&(list.get(i).getSalary()==employee.getSalary())
+    public static boolean save(Employee employee) {
+        ArrayList<Employee> list = readListFromFile();
+        list.add(employee);
+        clearFile();
+        return saveListToFile(list);
+    }
+
+    public static boolean delete(Employee employee) {
+        ArrayList<Employee> list = readListFromFile();
+        boolean result = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getName().equals(employee.getName())
+                    && (list.get(i).getAge() == employee.getAge())
+                    && (list.get(i).getJob().equals(employee.getJob()))
+                    && (list.get(i).getSalary() == employee.getSalary())
                     ) {
                 list.remove(list.get(i));
                 System.out.println("Обнаружен employee на удаление: " + employee.toString());
                 list.remove(employee);
+                result = true;
             }
         }
-        } catch (ClassNotFoundException|IOException e) {
-            System.out.println(e);
-            return false;
-        }
+
         clearFile();
-        for(Employee empl: list){
+        for (Employee empl : list) {
             save(empl);
-        } return true;
+        }
+        return result;
     }
 
     public static Employee getByName(String name) {
-        List<Employee> list = new ArrayList<Employee>();
+        ArrayList<Employee> list = readListFromFile();
         Employee resultEmployee = null;
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-            list = (ArrayList<Employee>) objectInputStream.readObject();
-            for (Employee empl : list) if (empl.getName().equals(name)) resultEmployee = empl;
-        } catch (ClassNotFoundException | IOException e) {
-            System.out.println(e);
-        }
+        for (Employee empl : list) if (empl.getName().equals(name)) resultEmployee = empl;
         return resultEmployee;
     }
 
-    public static void clearFile(){
+    public static void clearFile() {
         try {
             new FileOutputStream(fileName).close();
 
@@ -79,14 +94,24 @@ public class EmployeeData {
     }
 
     public static List<Employee> getByJob(Job job) {
-        List<Employee> list = new ArrayList<>();
+        ArrayList<Employee> list = readListFromFile();
         List<Employee> resultList = new ArrayList<>();
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-            list = (ArrayList<Employee>) objectInputStream.readObject();
-            for (Employee empl : list) if (empl.getJob().equals(job)) resultList.add(empl);
-        } catch (ClassNotFoundException | IOException e) {
-            System.out.println(e);
-        }
+        for (Employee empl : list) if (empl.getJob().equals(job)) resultList.add(empl);
         return resultList;
+    }
+
+    public static boolean saveOrUpdate(Employee employee) {
+        ArrayList<Employee> list = readListFromFile();
+        boolean found = false;
+        for (int i = 0; i < list.size(); i++) {
+            if ((list.get(i).getName().equals(employee.getName()) && list.get(i).getAge() == employee.getAge())) {
+                list.get(i).setSalary(employee.getSalary());
+                list.get(i).setJob(employee.getJob());
+                found = true;
+            }
+        }
+        if (!found) list.add(employee);
+        clearFile();
+        return saveListToFile(list);
     }
 }

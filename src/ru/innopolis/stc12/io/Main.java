@@ -17,22 +17,24 @@ public class Main {
         EmployeeData.save(employee3);
         EmployeeData.save(employee4);
         EmployeeData.save(employee5);
+        System.out.println("\n Данные записаны. Приступаю к удалению.");
+
+        EmployeeData.delete(employee3);
+        EmployeeData.delete(employee1);
         System.out.println("\n");
 
-     EmployeeData.delete(employee3);
-     EmployeeData.delete(employee1);
+        EmployeeData.save(employee1);
+        EmployeeData.save(employee1);
+        System.out.println("\n");
+        EmployeeData.delete(employee1);
         System.out.println("\n");
 
-     EmployeeData.save(employee1);
-     EmployeeData.save(employee1);
-        System.out.println("\n");
-     EmployeeData.delete(employee1);
-        System.out.println("\n");
-
-        System.out.println("finding by name method: " + EmployeeData.getByName("Alex"));
+        System.out.println("Метод поиска по имени: " + EmployeeData.getByName("Alex"));
 
         List<Employee> list = EmployeeData.getByJob(Job.CLERK);
-        System.out.println("finding by Job method: ");
+        System.out.println("Метод поиска по Job: ");
         for (Employee employee : list) System.out.println(employee);
+
+        EmployeeData.saveOrUpdate(new Employee("Kara", 68, 999999, Job.ADMINISTRATOR));
     }
 }
