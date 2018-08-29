@@ -20,6 +20,16 @@ public class EmployeeDataTest {
 
     @Test
     public void save() {
+        EmployeeData.clearFile();
+        Employee employee1 = new Employee("Alex", 28, 98000, Job.ENGENEER);
+        Employee employee2 = new Employee("Fill", 29, 90800, Job.ADMINISTRATOR);
+        Assert.assertEquals(true, EmployeeData.save(employee1));
+        Assert.assertEquals(true, EmployeeData.save(employee2));
+        ArrayList<Employee> list = new ArrayList<>();
+        list.add(employee1);
+        list.add(employee2);
+        Assert.assertEquals(list, EmployeeData.readListFromFile());
+
     }
 
     @Test
