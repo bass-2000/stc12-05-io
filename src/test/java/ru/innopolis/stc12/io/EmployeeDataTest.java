@@ -1,11 +1,9 @@
 package ru.innopolis.stc12.io;
 
-
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-
 
 public class EmployeeDataTest {
 
@@ -23,8 +21,8 @@ public class EmployeeDataTest {
         EmployeeData.clearFile();
         Employee employee1 = new Employee("Alex", 28, 98000, Job.ENGENEER);
         Employee employee2 = new Employee("Fill", 29, 90800, Job.ADMINISTRATOR);
-        Assert.assertEquals(true, EmployeeData.save(employee1));
-        Assert.assertEquals(true, EmployeeData.save(employee2));
+        Assert.assertTrue(EmployeeData.save(employee1));
+        Assert.assertTrue(EmployeeData.save(employee2));
         ArrayList<Employee> list = new ArrayList<>();
         list.add(employee1);
         list.add(employee2);
