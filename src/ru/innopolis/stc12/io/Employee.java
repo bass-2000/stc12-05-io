@@ -14,6 +14,13 @@ public class Employee implements Serializable {
     private Job job;
 
 
+    public Employee(String name, int age, double salary, Job job) {
+        this.name = name;
+        this.age = age;
+        this.salary = salary;
+        this.job = job;
+    }
+
     public Job getJob() {
         return job;
     }
@@ -44,13 +51,6 @@ public class Employee implements Serializable {
 
     public void setSalary(double salary) {
         this.salary = salary;
-    }
-
-    public Employee(String name, int age, double salary, Job job) {
-        this.name = name;
-        this.age = age;
-        this.salary = salary;
-        this.job = job;
     }
 
     @Override
