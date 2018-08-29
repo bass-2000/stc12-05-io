@@ -7,7 +7,7 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
-mainClassName ='main.java.ru.innopolis.stc12.io.Main'
+mainClassName ='ru.innopolis.stc12.io.Main'
 
 compileJava.options.encoding = 'UTF-8'
 jar {
